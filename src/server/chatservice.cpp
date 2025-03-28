@@ -17,16 +17,6 @@ ChatService* ChatService::instance()
     static ChatService service;
     return &service;
 }
-//处理登录业务
-void ChatService::login(const TcpConnectionPtr &conn, json &js, Timestamp time)
-{
-    LOG_INFO<<"do login service!";
-}
-//处理注册业务
-void ChatService::reg(const TcpConnectionPtr &conn, json &js, Timestamp time)
-{
-    LOG_INFO<<"do reg service!";
-}
 
 //获取消息对应的处理器
 MsgHandler ChatService::getHandler(int msgid)
@@ -43,5 +33,40 @@ MsgHandler ChatService::getHandler(int msgid)
     else
     {
         return _msgHandlerMap[msgid];
+    }
+}
+
+//处理登录业务
+void ChatService::login(const TcpConnectionPtr &conn, json &js, Timestamp time)
+{
+    LOG_INFO<<"do login service!";
+}
+//处理注册业务 name password
+void ChatService::reg(const TcpConnectionPtr &conn, json &js, Timestamp time)
+{
+    string name = js["name"];
+    string pwd = js["password"];
+
+    User user;
+    user.setName(name);
+    user.setPwd(pwd);
+    bool state = _userModel.insert(user);
+    if(state)
+    {
+        //注册成功
+        json response;
+        response["msgid"] = REG_MSG_ACK;
+        response["errnp"] = 0;
+        response["id"] = user.getId();
+        conn->send(response.dump());
+    }
+    else
+    {
+        //注册失败
+        json response;
+        response["msgid"] = REG_MSG_ACK;
+        response["errnp"] = 1;
+        response["id"] = user.getId();
+        conn->send(response.dump());
     }
 }

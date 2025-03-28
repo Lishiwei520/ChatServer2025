@@ -308,4 +308,6 @@ src/server/CMakeFiles/ChatServer.dir/chatserver.cpp.o: \
  /usr/include/c++/11/bits/basic_ios.tcc /usr/include/c++/11/ostream \
  /usr/include/c++/11/bits/ostream.tcc \
  /usr/include/c++/11/bits/istream.tcc \
- /root/code/ChatServer2025/include/server/chatservice.hpp
+ /root/code/ChatServer2025/include/server/chatservice.hpp \
+ /root/code/ChatServer2025/include/server/usermodel.hpp \
+ /root/code/ChatServer2025/include/server/user.hpp
