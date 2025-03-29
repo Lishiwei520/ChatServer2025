@@ -9,6 +9,7 @@ using namespace muduo;
 using namespace muduo::net;
 
 #include "usermodel.hpp"
+#include "offlinemessagemodel.hpp"
 #include "json.hpp"
 using json=nlohmann::json;
 
@@ -40,6 +41,7 @@ class ChatService
     
     // 数据操作类对象
     UserModel _userModel;
+    OfflineMsgModel _offlineMsgModel;
 
     //存储在线用户的通信连接,需要考虑线程安全问题
     unordered_map<int,TcpConnectionPtr> _userConnMap;

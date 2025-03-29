@@ -262,6 +262,7 @@ src/server/CMakeFiles/ChatServer.dir/chatservice.cpp.o: \
  /usr/include/c++/11/bits/unique_lock.h \
  /root/code/ChatServer2025/include/server/usermodel.hpp \
  /root/code/ChatServer2025/include/server/user.hpp \
+ /root/code/ChatServer2025/include/server/offlinemessagemodel.hpp \
  /root/code/ChatServer2025/thirdparty/json.hpp \
  /usr/include/c++/11/cassert /usr/include/c++/11/ciso646 \
  /usr/include/c++/11/numeric /usr/include/c++/11/bits/stl_numeric.h \

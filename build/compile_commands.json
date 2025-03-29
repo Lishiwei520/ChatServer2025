@@ -16,6 +16,11 @@
 },
 {
   "directory": "/root/code/ChatServer2025/build/src/server",
+  "command": "/usr/bin/g++  -I/root/code/ChatServer2025/include -I/root/code/ChatServer2025/include/server -I/root/code/ChatServer2025/include/server/db -I/root/code/ChatServer2025/thirdparty -g -g -std=gnu++17 -o CMakeFiles/ChatServer.dir/offlinemessagemodel.cpp.o -c /root/code/ChatServer2025/src/server/offlinemessagemodel.cpp",
+  "file": "/root/code/ChatServer2025/src/server/offlinemessagemodel.cpp"
+},
+{
+  "directory": "/root/code/ChatServer2025/build/src/server",
   "command": "/usr/bin/g++  -I/root/code/ChatServer2025/include -I/root/code/ChatServer2025/include/server -I/root/code/ChatServer2025/include/server/db -I/root/code/ChatServer2025/thirdparty -g -g -std=gnu++17 -o CMakeFiles/ChatServer.dir/usermodel.cpp.o -c /root/code/ChatServer2025/src/server/usermodel.cpp",
   "file": "/root/code/ChatServer2025/src/server/usermodel.cpp"
 },
