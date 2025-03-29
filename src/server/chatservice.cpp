@@ -12,6 +12,7 @@ ChatService::ChatService()
     _msgHandlerMap.insert({LOGIN_MSG,std::bind(&ChatService::login,this,_1,_2,_3)});
     _msgHandlerMap.insert({REG_MSG,std::bind(&ChatService::reg,this,_1,_2,_3)});
     _msgHandlerMap.insert({ONE_CHAT_MSG,std::bind(&ChatService::oneChat,this,_1,_2,_3)});
+    _msgHandlerMap.insert({ADD_FRIEND_MSG,std::bind(&ChatService::addFriend,this,_1,_2,_3)});
 }
 
 //获取单例对象的接口函数
@@ -82,6 +83,23 @@ void ChatService::login(const TcpConnectionPtr &conn, json &js, Timestamp time)
                 //读取该用户的离线消息后，把用户的所有离线消息删除掉
                 _offlineMsgModel.remove(id);
             }
+
+            //查询该用户的好友信息并返回
+            vector<User> userVec = _friendModel.query(id);
+            if(!userVec.empty())
+            {
+                vector<string> vec2;
+                for(auto u:userVec)
+                {
+                    json js;
+                    js["id"]=u.getId();
+                    js["name"]=user.getName();
+                    js["state"]=user.getState();
+                    vec2.push_back(js.dump());
+                }
+                response["friends"]=vec2;
+            }
+
             conn->send(response.dump());
         }
     }
@@ -175,4 +193,14 @@ void ChatService::clientCloseExcepetion(const TcpConnectionPtr &conn)
 void ChatService::reset(){
     //把online状态的用户，设置为offline
     _userModel.resetState();
+}
+
+//添加好友业务 msgid id friendid
+void ChatService::addFriend(const TcpConnectionPtr &conn, json &js, Timestamp time)
+{
+    int userid = js["id"].get<int>();
+    int friendid = js["friendid"].get<int>();
+
+    //存储好友信息
+    _friendModel.insert(userid,friendid);
 }

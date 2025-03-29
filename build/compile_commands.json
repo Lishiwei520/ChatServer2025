@@ -11,6 +11,11 @@
 },
 {
   "directory": "/root/code/ChatServer2025/build/src/server",
+  "command": "/usr/bin/g++  -I/root/code/ChatServer2025/include -I/root/code/ChatServer2025/include/server -I/root/code/ChatServer2025/include/server/db -I/root/code/ChatServer2025/thirdparty -g -g -std=gnu++17 -o CMakeFiles/ChatServer.dir/friendmodel.cpp.o -c /root/code/ChatServer2025/src/server/friendmodel.cpp",
+  "file": "/root/code/ChatServer2025/src/server/friendmodel.cpp"
+},
+{
+  "directory": "/root/code/ChatServer2025/build/src/server",
   "command": "/usr/bin/g++  -I/root/code/ChatServer2025/include -I/root/code/ChatServer2025/include/server -I/root/code/ChatServer2025/include/server/db -I/root/code/ChatServer2025/thirdparty -g -g -std=gnu++17 -o CMakeFiles/ChatServer.dir/main.cpp.o -c /root/code/ChatServer2025/src/server/main.cpp",
   "file": "/root/code/ChatServer2025/src/server/main.cpp"
 },
