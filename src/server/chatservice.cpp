@@ -56,6 +56,12 @@ void ChatService::login(const TcpConnectionPtr &conn, json &js, Timestamp time)
             conn->send(response.dump());
         }
         else{
+            //登录成功，记录用户连接信息
+            {
+                lock_guard<mutex> lock(_connMutex);
+                _userConnMap.insert({id,conn});
+            }
+
             //登陆成功，更新用户状态信息 state offline =>online
             user.setState("online");
             _userModel.updateState(user);
@@ -104,5 +110,31 @@ void ChatService::reg(const TcpConnectionPtr &conn, json &js, Timestamp time)
         response["errnp"] = 1;
         response["id"] = user.getId();
         conn->send(response.dump());
+    }
+}
+
+//处理客户端异常退出
+void ChatService::clientCloseExcepetion(const TcpConnectionPtr &conn)
+{
+    User user;
+    {
+        //删除_userConnMap中的conn
+        lock_guard<mutex> lock(_connMutex);
+        for(auto m:_userConnMap)
+        {
+            if(m.second == conn)
+            {
+                //从map表删除用户的连接信息
+                user.setId(m.first);
+                _userConnMap.erase(m.first);
+                break;
+            }
+        }
+    }
+    //将状态改为offline
+    if(user.getId()!=-1)
+    {
+        user.setState("offline");
+        _userModel.updateState(user);
     }
 }

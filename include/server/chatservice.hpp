@@ -3,6 +3,7 @@
 #include<muduo/net/TcpConnection.h>
 #include<unordered_map>
 #include<functional>
+#include<mutex>
 using namespace std;
 using namespace muduo;
 using namespace muduo::net;
@@ -26,6 +27,8 @@ class ChatService
     void reg(const TcpConnectionPtr &conn, json &js, Timestamp time);
     //获取消息对应的处理器
     MsgHandler getHandler(int msgid);
+    //处理客户端异常退出
+    void clientCloseExcepetion(const TcpConnectionPtr &conn);
 
 
     private:
@@ -35,6 +38,11 @@ class ChatService
     
     // 数据操作类对象
     UserModel _userModel;
+
+    //存储在线用户的通信连接,需要考虑线程安全问题
+    unordered_map<int,TcpConnectionPtr> _userConnMap;
+    //定义互斥锁，保证_userConnMap的线程安全
+    mutex _connMutex;
 };
 
 #endif
