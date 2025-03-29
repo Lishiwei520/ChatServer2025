@@ -82,7 +82,6 @@ void ChatService::login(const TcpConnectionPtr &conn, json &js, Timestamp time)
                 //读取该用户的离线消息后，把用户的所有离线消息删除掉
                 _offlineMsgModel.remove(id);
             }
-
             conn->send(response.dump());
         }
     }
@@ -125,6 +124,27 @@ void ChatService::reg(const TcpConnectionPtr &conn, json &js, Timestamp time)
     }
 }
 
+//一对一聊天服务
+void ChatService::oneChat(const TcpConnectionPtr &conn, json &js, Timestamp time)
+{
+    int toid = js["to"].get<int>();
+    {
+        lock_guard<mutex> lock(_connMutex);
+        auto it = _userConnMap.find(toid);
+        if(it !=_userConnMap.end())
+        {
+            //接收方在线，转发消息,服务器做中转操作，主动发送消息给toid
+            it->second->send(js.dump());
+            return;
+        }
+        else
+        {
+            //接收方不在线，存储离线消息
+            _offlineMsgModel.insert(toid,js.dump());
+        }
+    }
+}
+
 //处理客户端异常退出
 void ChatService::clientCloseExcepetion(const TcpConnectionPtr &conn)
 {
@@ -151,23 +171,8 @@ void ChatService::clientCloseExcepetion(const TcpConnectionPtr &conn)
     }
 }
 
-//一对一聊天服务
-void ChatService::oneChat(const TcpConnectionPtr &conn, json &js, Timestamp time)
-{
-    int toid = js["to"].get<int>();
-    {
-        lock_guard<mutex> lock(_connMutex);
-        auto it = _userConnMap.find(toid);
-        if(it !=_userConnMap.end())
-        {
-            //接收方在线，转发消息,服务器做中转操作，主动发送消息给toid
-            it->second->send(js.dump());
-            return;
-        }
-        else
-        {
-            //接收方不在线，存储离线消息
-            _offlineMsgModel.insert(toid,js.dump());
-        }
-    }
+//服务器异常，业务重置方法
+void ChatService::reset(){
+    //把online状态的用户，设置为offline
+    _userModel.resetState();
 }
