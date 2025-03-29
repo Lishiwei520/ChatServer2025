@@ -10,6 +10,7 @@ ChatService::ChatService()
 {
     _msgHandlerMap.insert({LOGIN_MSG,std::bind(&ChatService::login,this,_1,_2,_3)});
     _msgHandlerMap.insert({REG_MSG,std::bind(&ChatService::reg,this,_1,_2,_3)});
+    _msgHandlerMap.insert({ONE_CHAT_MSG,std::bind(&ChatService::oneChat,this,_1,_2,_3)});
 }
 
 //获取单例对象的接口函数
@@ -136,5 +137,25 @@ void ChatService::clientCloseExcepetion(const TcpConnectionPtr &conn)
     {
         user.setState("offline");
         _userModel.updateState(user);
+    }
+}
+
+//一对一聊天服务
+void ChatService::oneChat(const TcpConnectionPtr &conn, json &js, Timestamp time)
+{
+    int toid = js["to"].get<int>();
+    {
+        lock_guard<mutex> lock(_connMutex);
+        auto it = _userConnMap.find(toid);
+        if(it !=_userConnMap.end())
+        {
+            //接收方在线，转发消息,服务器做中转操作，主动发送消息给toid
+            it->second->send(js.dump());
+            return;
+        }
+        else
+        {
+            //接收方不在线，存储离线消息
+        }
     }
 }

@@ -385,8 +385,7 @@ src/server/CMakeFiles/ChatServer.dir/chatserver.cpp.o: ../src/server/chatserver.
   /usr/include/c++/11/bits/std_mutex.h \
   /usr/include/c++/11/bits/unique_lock.h \
   ../include/server/usermodel.hpp \
-  ../include/server/user.hpp \
-  /usr/include/c++/11/iostream
+  ../include/server/user.hpp
 
 src/server/CMakeFiles/ChatServer.dir/chatservice.cpp.o: ../src/server/chatservice.cpp \
   /usr/include/stdc-predef.h \
